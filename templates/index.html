@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Konversi temperatur online - Celsius, Fahrenheit, Kelvin, Reamur">
+    <meta name="keywords" content="konversi temperatur, celsius, fahrenheit, kelvin, reamur">
+    <meta name="author" content="Temperature Converter">
+    <title>Konversi Temperatur - Web Version</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --primary-hover: #45a049;
+            --success-color: #2E7D32;
+            --error-color: #D32F2F;
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        body {
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .main-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 0;
+        }
+        
+        .converter-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            transition: transform 0.3s ease;
+        }
+        
+        .converter-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .title {
+            color: #333;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 8px;
+        }
+        
+        .form-control, .form-select {
+            border-radius: 12px;
+            border: 2px solid #e0e0e0;
+            padding: 12px 16px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+        }
+        
+        .convert-btn {
+            background: var(--primary-color);
+            border: none;
+            border-radius: 12px;
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        .convert-btn:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
+        }
+        
+        .convert-btn:active {
+            transform: translateY(0);
+        }
+        
+        .result-container {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .result-success {
+            background: rgba(46, 125, 50, 0.1);
+            color: var(--success-color);
+            border: 2px solid rgba(46, 125, 50, 0.3);
+        }
+        
+        .result-error {
+            background: rgba(211, 47, 47, 0.1);
+            color: var(--error-color);
+            border: 2px solid rgba(211, 47, 47, 0.3);
+        }
+        
+        .loading-spinner {
+            display: none;
+        }
+        
+        .thermometer-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        
+        .footer {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        @media (max-width: 576px) {
+            .converter-card {
+                margin: 20px;
+                padding: 30px 20px;
+            }
+            
+            .footer {
+                display: none;
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6 col-md-8">
+                    <div class="converter-card fade-in">
+                        <!-- Header -->
+                        <div class="text-center">
+                            <i class="fas fa-thermometer-half thermometer-icon pulse"></i>
+                            <h1 class="title">Konversi Temperatur</h1>
+                            <p class="text-muted">Konversi antar unit temperatur dengan mudah</p>
+                        </div>
+                        
+                        <!-- Form -->
+                        <form id="temperatureForm">
+                            <div class="mb-3">
+                                <label for="temperatureInput" class="form-label">
+                                    <i class="fas fa-temperature-low me-2"></i>Masukkan Temperatur
+                                </label>
+                                <input type="number" 
+                                       class="form-control" 
+                                       id="temperatureInput" 
+                                       placeholder="Contoh: 25" 
+                                       step="any"
+                                       required>
+                                <div class="invalid-feedback">
+                                    Silakan masukkan nilai temperatur yang valid.
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="conversionSelect" class="form-label">
+                                    <i class="fas fa-exchange-alt me-2"></i>Pilih Jenis Konversi
+                                </label>
+                                <select class="form-select" id="conversionSelect" required>
+                                    <option value="">-- Pilih Konversi --</option>
+                                    {% for option in conversion_options %}
+                                    <option value="{{ option }}">{{ option }}</option>
+                                    {% endfor %}
+                                </select>
+                                <div class="invalid-feedback">
+                                    Silakan pilih jenis konversi.
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="convert-btn">
+                                <span class="button-text">
+                                    <i class="fas fa-calculator me-2"></i>Konversi Sekarang
+                                </span>
+                                <span class="loading-spinner">
+                                    <i class="fas fa-spinner fa-spin me-2"></i>Mengkonversi...
+                                </span>
+                            </button>
+                        </form>
+                        
+                        <!-- Result -->
+                        <div id="resultContainer" class="result-container" style="display: none;">
+                            <span id="resultText"></span>
+                        </div>
+                        
+                        <!-- Quick Actions -->
+                        <div class="text-center mt-3">
+                            <button type="button" class="btn btn-outline-secondary btn-sm me-2" onclick="clearForm()">
+                                <i class="fas fa-eraser me-1"></i>Bersihkan
+                            </button>
+                            <button type="button" class="btn btn-outline-info btn-sm" onclick="showInfo()">
+                                <i class="fas fa-info-circle me-1"></i>Info
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <div class="footer">
+        <i class="fas fa-code me-1"></i>Temperature Converter v1.0
+    </div>
+    
+    <!-- Info Modal -->
+    <div class="modal fade" id="infoModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-info-circle me-2"></i>Informasi Konversi Temperatur
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <h6>Formula Konversi:</h6>
+                    <ul class="list-unstyled">
+                        <li><strong>Celsius ke Fahrenheit:</strong> °F = (°C × 9/5) + 32</li>
+                        <li><strong>Celsius ke Kelvin:</strong> K = °C + 273.15</li>
+                        <li><strong>Celsius ke Reamur:</strong> °Re = °C × 4/5</li>
+                    </ul>
+                    <hr>
+                    <h6>Contoh Nilai:</h6>
+                    <ul class="list-unstyled">
+                        <li>• Air membeku: 0°C = 32°F = 273.15K = 0°Re</li>
+                        <li>• Air mendidih: 100°C = 212°F = 373.15K = 80°Re</li>
+                        <li>• Suhu ruangan: ~25°C = ~77°F = ~298K = ~20°Re</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('temperatureForm');
+            const resultContainer = document.getElementById('resultContainer');
+            const resultText = document.getElementById('resultText');
+            const buttonText = document.querySelector('.button-text');
+            const loadingSpinner = document.querySelector('.loading-spinner');
+            const temperatureInput = document.getElementById('temperatureInput');
+            const conversionSelect = document.getElementById('conversionSelect');
+            
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const temperature = temperatureInput.value;
+                const conversionType = conversionSelect.value;
+                
+                // Client-side validation
+                if (!temperature || !conversionType) {
+                    showResult('Harap lengkapi semua field', 'error');
+                    return;
+                }
+                
+                // Show loading state
+                showLoading(true);
+                
+                try {
+                    const response = await fetch('/convert', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            temperature: temperature,
+                            conversion_type: conversionType
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        showResult(data.formatted_result, 'success');
+                    } else {
+                        showResult(data.error, 'error');
+                    }
+                } catch (error) {
+                    console.error('Network error:', error);
+                    showResult('Terjadi kesalahan jaringan. Silakan coba lagi.', 'error');
+                } finally {
+                    showLoading(false);
+                }
+            });
+            
+            function showLoading(isLoading) {
+                if (isLoading) {
+                    buttonText.style.display = 'none';
+                    loadingSpinner.style.display = 'inline';
+                    form.querySelector('button').disabled = true;
+                } else {
+                    buttonText.style.display = 'inline';
+                    loadingSpinner.style.display = 'none';
+                    form.querySelector('button').disabled = false;
+                }
+            }
+            
+            function showResult(message, type) {
+                resultText.textContent = message;
+                resultContainer.className = `result-container result-${type} fade-in`;
+                resultContainer.style.display = 'flex';
+                
+                // Scroll to result
+                resultContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+            
+            // Clear result when form changes
+            temperatureInput.addEventListener('input', clearResult);
+            conversionSelect.addEventListener('change', clearResult);
+            
+            function clearResult() {
+                resultContainer.style.display = 'none';
+            }
+            
+            // Global functions for buttons
+            window.clearForm = function() {
+                temperatureInput.value = '';
+                conversionSelect.value = '';
+                clearResult();
+                temperatureInput.focus();
+            };
+            
+            window.showInfo = function() {
+                const infoModal = new bootstrap.Modal(document.getElementById('infoModal'));
+                infoModal.show();
+            };
+            
+            // Focus on temperature input when page loads
+            temperatureInput.focus();
+            
+            // Add keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                if (e.ctrlKey && e.key === 'Enter') {
+                    e.preventDefault();
+                    form.dispatchEvent(new Event('submit'));
+                }
+                if (e.key === 'Escape') {
+                    clearForm();
+                }
+            });
+            
+            console.log('🌡️ Temperature Converter Web App initialized');
+        });
+    </script>
+</body>
+</html>

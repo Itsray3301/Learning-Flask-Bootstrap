@@ -1,0 +1,19 @@
+# Temperature Converter Web App - Dependencies
+# Install with: pip install -r requirements.txt
+
+Flask==2.3.3
+Werkzeug==2.3.7
+
+# Optional dependencies for production
+gunicorn==21.2.0  # WSGI server for production
+python-dotenv==1.0.0  # Environment variables management
+
+# Development dependencies (optional)
+pytest==7.4.2  # Testing framework
+pytest-flask==1.2.0  # Flask testing utilities
+black==23.9.1  # Code formatter
+flake8==6.1.0  # Code linter
+
+# Security (optional)
+flask-limiter==3.5.0  # Rate limiting
+flask-cors==4.0.0  # CORS handling

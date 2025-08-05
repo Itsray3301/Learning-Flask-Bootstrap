@@ -1,0 +1,140 @@
+/* 
+Temperature Converter Web App - Custom Styles
+Author: itsray3301
+Description: Additional custom styles for enhanced UI/UX
+*/
+
+/* Additional animations */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes bounceIn {
+    0%, 20%, 40%, 60%, 80% {
+        transform: translateY(0);
+    }
+    10% {
+        transform: translateY(-10px);
+    }
+    30% {
+        transform: translateY(-5px);
+    }
+    50% {
+        transform: translateY(-3px);
+    }
+    70% {
+        transform: translateY(-2px);
+    }
+    90% {
+        transform: translateY(-1px);
+    }
+}
+
+/* Enhanced form styles */
+.form-control:valid {
+    border-color: #28a745;
+}
+
+.form-control:invalid {
+    border-color: #dc3545;
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-hover);
+}
+
+/* Improved mobile responsiveness */
+@media (max-width: 480px) {
+    .converter-card {
+        padding: 25px 15px;
+        margin: 10px;
+    }
+    
+    .title {
+        font-size: 1.75rem;
+    }
+    
+    .thermometer-icon {
+        font-size: 2.5rem;
+    }
+}
+
+/* Dark mode styles (for future enhancement) */
+@media (prefers-color-scheme: dark) {
+    .converter-card {
+        background: rgba(33, 37, 41, 0.95);
+        color: #fff;
+    }
+    
+    .title {
+        color: #fff;
+    }
+    
+    .form-label {
+        color: #e9ecef;
+    }
+    
+    .form-control, .form-select {
+        background-color: #495057;
+        border-color: #6c757d;
+        color: #fff;
+    }
+    
+    .form-control::placeholder {
+        color: #adb5bd;
+    }
+}
+
+/* Print styles */
+@media print {
+    body {
+        background: white !important;
+    }
+    
+    .converter-card {
+        box-shadow: none !important;
+        border: 1px solid #ddd;
+    }
+    
+    .convert-btn, .footer {
+        display: none !important;
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .converter-card {
+        border: 3px solid #000;
+    }
+    
+    .form-control, .form-select {
+        border: 2px solid #000;
+    }
+    
+    .convert-btn {
+        background: #000;
+        border: 2px solid #000;
+    }
+}
