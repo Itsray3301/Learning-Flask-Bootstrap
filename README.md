@@ -1,8 +1,8 @@
-# 🌡️ Temperature Converter Web App
+#  Temperature Converter Web App
 
 Aplikasi web untuk konversi temperatur menggunakan Flask + Bootstrap 5.
 
-## ✨ Fitur
+##  Fitur
 
 - **Konversi Multi-Unit**: Celsius, Fahrenheit, Kelvin, Reamur
 - **Responsive Design**: Bootstrap 5 dengan modern UI/UX
@@ -13,7 +13,7 @@ Aplikasi web untuk konversi temperatur menggunakan Flask + Bootstrap 5.
 - **Modern Animations**: Smooth transitions dan loading states
 - **Mobile Friendly**: Optimized untuk semua device sizes
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Prerequisites
 - Python 3.7+
@@ -56,7 +56,7 @@ Temperature_Web/
         └── app.js        # Custom JavaScript
 ```
 
-## 🛠️ API Endpoints
+##  API Endpoints
 
 ### GET `/`
 Homepage dengan form konversi
@@ -87,20 +87,20 @@ Mendapatkan daftar opsi konversi yang tersedia
 ### GET `/health`
 Health check endpoint untuk monitoring
 
-## ⌨️ Keyboard Shortcuts
+##  Keyboard Shortcuts
 
 - **Ctrl + Enter**: Konversi temperatur
 - **Escape**: Bersihkan form
 - **Ctrl + I**: Tampilkan informasi konversi
 
-## 🎨 Teknologi yang Digunakan
+##  Teknologi yang Digunakan
 
 - **Backend**: Flask (Python web framework)
 - **Frontend**: Bootstrap 5, HTML5, CSS3, JavaScript ES6+
 - **Icons**: Font Awesome 6
 - **Styling**: Custom CSS dengan CSS Variables dan Animations
 
-## 🔧 Konfigurasi
+##  Konfigurasi
 
 ### Environment Variables (Opsional)
 Buat file `.env` untuk konfigurasi:
@@ -117,14 +117,14 @@ Untuk production, gunakan WSGI server seperti Gunicorn:
 gunicorn -w 4 -b 0.0.0.0:5000 app:app
 ```
 
-## 🧪 Testing
+##  Testing
 
 Jalankan unit tests (jika tersedia):
 ```bash
 pytest
 ```
 
-## 📱 Browser Support
+##  Browser Support
 
 - ✅ Chrome 90+
 - ✅ Firefox 88+
@@ -132,7 +132,7 @@ pytest
 - ✅ Edge 90+
 - ✅ Mobile browsers
 
-## 🎯 Formula Konversi
+##  Formula Konversi
 
 ### Dari Celsius:
 - **ke Fahrenheit**: °F = (°C × 9/5) + 32
@@ -144,7 +144,7 @@ pytest
 - **dari Kelvin**: °C = K - 273.15
 - **dari Reamur**: °C = °Re × 5/4
 
-## 🐛 Troubleshooting
+##  Troubleshooting
 
 ### Common Issues:
 
@@ -161,7 +161,7 @@ pytest
 3. **Template tidak ditemukan:**
    Pastikan folder `templates/` ada dan berisi file HTML
 
-## 🚀 Future Enhancements
+##  Future Enhancements
 
 - [ ] Dark mode toggle
 - [ ] Conversion history
