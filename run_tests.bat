@@ -14,7 +14,7 @@ REM Cek module yang dibutuhkan
 python -c "import flask, unittest" >nul 2>&1
 if %errorlevel% neq 0 (
     echo ⚠️  Install dependencies untuk test...
-    pip install -r requirements.txt
+    python -m pip install -r requirements.txt
 )
 
 echo.

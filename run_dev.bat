@@ -16,7 +16,7 @@ REM Cek apakah Flask sudah terinstall
 python -c "import flask" >nul 2>&1
 if %errorlevel% neq 0 (
     echo ⚠️  Flask belum ada. Sedang install dependencies...
-    pip install -r requirements.txt
+    python -m pip install -r requirements.txt
     if %errorlevel% neq 0 (
         echo ❌ Gagal install dependencies
         pause
