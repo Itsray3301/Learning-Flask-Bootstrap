@@ -1,20 +1,21 @@
 /*
-Temperature Converter Web App - JavaScript
-Author: itsray3301
+JavaScript untuk Temperature Converter
+File ini berisi semua fungsi JavaScript untuk interaksi user
+Termasuk AJAX, validasi, dan utility functions
 */
 
-// Temperature Converter Web App Utils
+// Object utama untuk menampung semua fungsi aplikasi
 const TemperatureApp = {
-    // Configuration
+    // Konfigurasi aplikasi
     config: {
         apiEndpoint: '/convert',
         debounceDelay: 300,
         animationDuration: 300
     },
     
-    // Utility functions
+    // Fungsi-fungsi utility
     utils: {
-        // Debounce function for input events
+        // Debounce untuk mengurangi request berlebihan
         debounce: function(func, wait) {
             let timeout;
             return function executedFunction(...args) {
@@ -27,7 +28,7 @@ const TemperatureApp = {
             };
         },
         
-        // Format number with locale
+        // Format angka sesuai locale Indonesia
         formatNumber: function(num, decimals = 2) {
             return parseFloat(num).toLocaleString('id-ID', {
                 minimumFractionDigits: decimals,
@@ -35,13 +36,13 @@ const TemperatureApp = {
             });
         },
         
-        // Validate temperature input
+        // Validasi input temperatur
         isValidTemperature: function(value) {
             const num = parseFloat(value);
             return !isNaN(num) && isFinite(num);
         },
         
-        // Get temperature unit from conversion type
+        // Ambil unit temperatur dari jenis konversi
         getTemperatureUnit: function(conversionType) {
             const unitMap = {
                 'Celcius ke Fahrenheit': { from: '°C', to: '°F' },
@@ -55,9 +56,9 @@ const TemperatureApp = {
         }
     },
     
-    // Local storage functions
+    // Fungsi untuk menyimpan data di browser
     storage: {
-        // Save conversion history
+        // Simpan riwayat konversi
         saveHistory: function(conversion) {
             try {
                 let history = JSON.parse(localStorage.getItem('temperatureHistory') || '[]');
@@ -65,7 +66,7 @@ const TemperatureApp = {
                     ...conversion,
                     timestamp: new Date().toISOString()
                 });
-                // Keep only last 10 conversions
+                // Simpan hanya 10 konversi terakhir
                 history = history.slice(0, 10);
                 localStorage.setItem('temperatureHistory', JSON.stringify(history));
             } catch (error) {
@@ -73,7 +74,7 @@ const TemperatureApp = {
             }
         },
         
-        // Get conversion history
+        // Ambil riwayat konversi
         getHistory: function() {
             try {
                 return JSON.parse(localStorage.getItem('temperatureHistory') || '[]');
@@ -83,7 +84,7 @@ const TemperatureApp = {
             }
         },
         
-        // Clear history
+        // Hapus riwayat
         clearHistory: function() {
             try {
                 localStorage.removeItem('temperatureHistory');
@@ -93,11 +94,11 @@ const TemperatureApp = {
         }
     },
     
-    // Analytics functions
+    // Fungsi untuk tracking (sederhana)
     analytics: {
-        // Track conversion event
+        // Track event konversi
         trackConversion: function(conversionType, inputValue, result) {
-            // Simple analytics tracking
+            // Tracking sederhana ke console
             console.log('Conversion tracked:', {
                 type: conversionType,
                 input: inputValue,
@@ -106,7 +107,7 @@ const TemperatureApp = {
             });
         },
         
-        // Track error event
+        // Track event error
         trackError: function(error, context) {
             console.error('Error tracked:', {
                 error: error,
@@ -116,11 +117,11 @@ const TemperatureApp = {
         }
     },
     
-    // Notification system
+    // Sistem notifikasi toast
     notification: {
-        // Show toast notification
+        // Tampilkan notifikasi toast
         showToast: function(message, type = 'info', duration = 3000) {
-            // Create toast element
+            // Buat element toast
             const toast = document.createElement('div');
             toast.className = `toast toast-${type}`;
             toast.innerHTML = `
@@ -130,10 +131,10 @@ const TemperatureApp = {
                 </div>
             `;
             
-            // Add to DOM
+            // Tambahkan ke DOM
             document.body.appendChild(toast);
             
-            // Auto remove after duration
+            // Hapus otomatis setelah durasi tertentu
             setTimeout(() => {
                 if (toast.parentNode) {
                     toast.parentNode.removeChild(toast);
@@ -141,7 +142,7 @@ const TemperatureApp = {
             }, duration);
         },
         
-        // Get icon for toast type
+        // Ambil icon sesuai tipe toast
         getIcon: function(type) {
             const icons = {
                 'success': 'check-circle',
@@ -153,9 +154,9 @@ const TemperatureApp = {
         }
     },
     
-    // Keyboard shortcuts
+    // Shortcut keyboard
     keyboard: {
-        // Initialize keyboard shortcuts
+        // Inisialisasi shortcut keyboard
         init: function() {
             document.addEventListener('keydown', (e) => {
                 // Ctrl + Enter: Submit form
@@ -165,14 +166,14 @@ const TemperatureApp = {
                     if (form) form.dispatchEvent(new Event('submit'));
                 }
                 
-                // Escape: Clear form
+                // Escape: Bersihkan form
                 if (e.key === 'Escape') {
                     if (typeof window.clearForm === 'function') {
                         window.clearForm();
                     }
                 }
                 
-                // Ctrl + I: Show info
+                // Ctrl + I: Tampilkan info
                 if (e.ctrlKey && e.key === 'i') {
                     e.preventDefault();
                     if (typeof window.showInfo === 'function') {
@@ -183,26 +184,26 @@ const TemperatureApp = {
         }
     },
     
-    // Initialize the app
+    // Inisialisasi aplikasi
     init: function() {
         console.log('🌡️ Temperature Converter App Utils initialized');
         this.keyboard.init();
         
-        // Add version info to console
+        // Info versi di console
         console.log('%c🚀 Temperature Converter v1.0', 'color: #4CAF50; font-weight: bold;');
-        console.log('%cKeyboard shortcuts:', 'color: #666; font-weight: bold;');
+        console.log('%cShortcut keyboard:', 'color: #666; font-weight: bold;');
         console.log('  Ctrl + Enter: Convert');
-        console.log('  Escape: Clear form');
-        console.log('  Ctrl + I: Show info');
+        console.log('  Escape: Bersihkan form');
+        console.log('  Ctrl + I: Tampilkan info');
     }
 };
 
-// Initialize when DOM is loaded
+// Inisialisasi ketika DOM sudah loaded
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => TemperatureApp.init());
 } else {
     TemperatureApp.init();
 }
 
-// Export for global use
+// Export untuk penggunaan global
 window.TemperatureApp = TemperatureApp;

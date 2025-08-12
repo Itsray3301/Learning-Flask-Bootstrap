@@ -1,39 +1,39 @@
 @echo off
-echo 🧪 Temperature Converter Web App - Running Tests
+echo 🧪 Temperature Converter - Menjalankan Test
 echo ===============================================
 
-REM Check if Python is installed
+REM Cek Python
 python --version >nul 2>&1
 if %errorlevel% neq 0 (
-    echo ❌ Python tidak terinstall
+    echo ❌ Python belum terinstall
     pause
     exit /b 1
 )
 
-REM Check if required modules are installed
+REM Cek module yang dibutuhkan
 python -c "import flask, unittest" >nul 2>&1
 if %errorlevel% neq 0 (
-    echo ⚠️  Installing test dependencies...
+    echo ⚠️  Install dependencies untuk test...
     pip install -r requirements.txt
 )
 
 echo.
-echo 🧪 Running unit tests...
+echo 🧪 Menjalankan unit test...
 echo.
 
-REM Run tests with coverage if available
+REM Jalankan test dengan coverage jika ada
 python -c "import coverage" >nul 2>&1
 if %errorlevel% equ 0 (
-    echo 📊 Running tests with coverage...
+    echo 📊 Menjalankan test dengan coverage...
     coverage run -m pytest test_web_app.py -v
     echo.
     echo 📈 Coverage Report:
     coverage report
 ) else (
-    echo 🔍 Running basic tests...
+    echo 🔍 Menjalankan test dasar...
     python test_web_app.py
 )
 
 echo.
-echo ✅ Tests completed!
+echo ✅ Test selesai!
 pause

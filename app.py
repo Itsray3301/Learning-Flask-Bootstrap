@@ -1,6 +1,6 @@
 """
-Flask Temperature Converter Web Application
-Author: itsray3301
+Temperature Converter Web App
+Belajar Flask untuk konversi temperatur
 """
 
 from flask import Flask, render_template, request, jsonify
@@ -10,7 +10,7 @@ import os
 # Add current directory to path to import temperature logic
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-# Import logic dari temperature_logic.py
+# Import fungsi konversi dari file terpisah
 from temperature_logic import TemperatureConverter, InputValidator, CONVERSION_OPTIONS
 
 app = Flask(__name__)
@@ -18,19 +18,19 @@ app.config['SECRET_KEY'] = 'temperature-converter-secret-key-2024'
 
 @app.route('/')
 def index():
-    """Homepage dengan form konversi"""
+    """Halaman utama dengan form konversi temperatur"""
     return render_template('index.html', conversion_options=CONVERSION_OPTIONS)
 
 @app.route('/convert', methods=['POST'])
 def convert_temperature():
-    """API endpoint untuk konversi temperatur"""
+    """Endpoint untuk memproses konversi temperatur via AJAX"""
     try:
-        # Get data from request
+        # Ambil data dari request JSON
         data = request.get_json()
         temperature_input = data.get('temperature', '')
         conversion_type = data.get('conversion_type', '')
         
-        # Validate input
+        # Validasi input dari user
         validator = InputValidator()
         is_valid, temperature, error_message = validator.validate_temperature_input(str(temperature_input))
         
@@ -40,7 +40,7 @@ def convert_temperature():
                 'error': error_message
             }), 400
         
-        # Perform conversion
+        # Lakukan konversi temperatur
         converter = TemperatureConverter()
         result, formatted_result = converter.convert(temperature, conversion_type)
         
@@ -66,12 +66,12 @@ def convert_temperature():
 
 @app.route('/api/conversions')
 def get_conversion_options():
-    """API endpoint untuk mendapatkan opsi konversi"""
+    """Endpoint untuk mendapatkan daftar opsi konversi yang tersedia"""
     return jsonify(CONVERSION_OPTIONS)
 
 @app.route('/health')
 def health_check():
-    """Health check endpoint"""
+    """Endpoint untuk cek status aplikasi"""
     return jsonify({
         'status': 'healthy',
         'service': 'Temperature Converter API',
@@ -80,14 +80,14 @@ def health_check():
 
 @app.errorhandler(404)
 def not_found(error):
-    """Handle 404 errors"""
+    """Handler untuk error 404 - halaman tidak ditemukan"""
     if request.is_json:
         return jsonify({'error': 'Endpoint not found'}), 404
     return render_template('404.html'), 404
 
 @app.errorhandler(500)
 def internal_error(error):
-    """Handle 500 errors"""
+    """Handler untuk error 500 - server error"""
     if request.is_json:
         return jsonify({'error': 'Internal server error'}), 500
     return render_template('500.html'), 500

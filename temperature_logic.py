@@ -1,17 +1,18 @@
 """
-Temperature Conversion Logic
-Extracted from Temperature_Enhanced_UI.py untuk digunakan di web version
+Logic Konversi Temperatur
+File ini berisi semua fungsi untuk konversi antar unit temperatur
+Dipisah dari app.py agar kode lebih rapi dan mudah di-maintain
 """
 
 from typing import Dict, Tuple
 
-# Constants - Semua nilai konstan di satu tempat
+# Konstanta untuk perhitungan konversi
 KELVIN_OFFSET = 273.15
 FAHRENHEIT_MULTIPLIER = 9/5
 FAHRENHEIT_OFFSET = 32
 REAMUR_MULTIPLIER = 4/5
 
-# Conversion options dengan format yang konsisten
+# Daftar opsi konversi yang tersedia
 CONVERSION_OPTIONS = [
     "Celcius ke Fahrenheit",
     "Celcius ke Kelvin", 
@@ -22,41 +23,44 @@ CONVERSION_OPTIONS = [
 ]
 
 class TemperatureConverter:
-    """Class untuk handle semua logic konversi temperatur"""
+    """
+    Class untuk menangani semua konversi temperatur
+    Setiap method menangani satu jenis konversi
+    """
     
     @staticmethod
     def celsius_to_fahrenheit(celsius: float) -> float:
-        """Konversi Celsius ke Fahrenheit"""
+        """Konversi dari Celsius ke Fahrenheit: °F = (°C × 9/5) + 32"""
         return celsius * FAHRENHEIT_MULTIPLIER + FAHRENHEIT_OFFSET
     
     @staticmethod
     def celsius_to_kelvin(celsius: float) -> float:
-        """Konversi Celsius ke Kelvin"""
+        """Konversi dari Celsius ke Kelvin: K = °C + 273.15"""
         return celsius + KELVIN_OFFSET
     
     @staticmethod
     def celsius_to_reamur(celsius: float) -> float:
-        """Konversi Celsius ke Reamur"""
+        """Konversi dari Celsius ke Reamur: °Re = °C × 4/5"""
         return celsius * REAMUR_MULTIPLIER
     
     @staticmethod
     def fahrenheit_to_celsius(fahrenheit: float) -> float:
-        """Konversi Fahrenheit ke Celsius"""
+        """Konversi dari Fahrenheit ke Celsius: °C = (°F - 32) × 5/9"""
         return (fahrenheit - FAHRENHEIT_OFFSET) / FAHRENHEIT_MULTIPLIER
     
     @staticmethod
     def kelvin_to_celsius(kelvin: float) -> float:
-        """Konversi Kelvin ke Celsius"""
+        """Konversi dari Kelvin ke Celsius: °C = K - 273.15"""
         return kelvin - KELVIN_OFFSET
     
     @staticmethod
     def reamur_to_celsius(reamur: float) -> float:
-        """Konversi Reamur ke Celsius"""
+        """Konversi dari Reamur ke Celsius: °C = °Re × 5/4"""
         return reamur / REAMUR_MULTIPLIER
     
     @classmethod
     def get_conversion_methods(cls) -> Dict[str, callable]:
-        """Return dictionary mapping conversion names to methods"""
+        """Mengembalikan dictionary yang memetakan nama konversi ke method-nya"""
         return {
             "Celcius ke Fahrenheit": cls.celsius_to_fahrenheit,
             "Celcius ke Kelvin": cls.celsius_to_kelvin,
@@ -69,8 +73,9 @@ class TemperatureConverter:
     @classmethod
     def convert(cls, temperature: float, conversion_type: str) -> Tuple[float, str]:
         """
-        Convert temperature based on conversion type
-        Returns: (result, formatted_string)
+        Fungsi utama untuk konversi temperatur
+        Input: nilai temperatur dan jenis konversi
+        Output: (hasil_konversi, string_terformat)
         """
         conversion_methods = cls.get_conversion_methods()
         
@@ -84,7 +89,7 @@ class TemperatureConverter:
     
     @staticmethod
     def _format_result(input_temp: float, result: float, conversion_type: str) -> str:
-        """Format the conversion result for display"""
+        """Format hasil konversi untuk ditampilkan ke user"""
         unit_mapping = {
             "Celcius ke Fahrenheit": (f"{input_temp}°C", f"{result:.2f}°F"),
             "Celcius ke Kelvin": (f"{input_temp}°C", f"{result:.2f} K"),
@@ -98,13 +103,13 @@ class TemperatureConverter:
         return f"{input_str} = {result_str}"
 
 class InputValidator:
-    """Class untuk handle validasi input"""
+    """Class untuk validasi input dari user"""
     
     @staticmethod
     def validate_temperature_input(input_text: str) -> Tuple[bool, float, str]:
         """
-        Validate temperature input
-        Returns: (is_valid, temperature_value, error_message)
+        Validasi input temperatur dari user
+        Return: (valid_atau_tidak, nilai_temperatur, pesan_error)
         """
         if not input_text.strip():
             return False, 0.0, "Masukkan nilai temperatur"

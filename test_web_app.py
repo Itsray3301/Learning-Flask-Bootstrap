@@ -1,7 +1,7 @@
 """
-Unit Tests untuk Temperature Converter Web App
-Author: itsray3301
-Description: Comprehensive testing untuk Flask application
+Unit Test untuk Temperature Converter Web App
+File ini berisi semua test case untuk memastikan aplikasi berjalan dengan baik
+Menggunakan unittest framework bawaan Python
 """
 
 import unittest
@@ -9,29 +9,29 @@ import json
 import sys
 import os
 
-# Add the parent directory to the path to import the modules
+# Tambahkan directory parent untuk import module
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from app import app
 from temperature_logic import TemperatureConverter, InputValidator
 
 class TestTemperatureWebApp(unittest.TestCase):
-    """Test cases untuk Flask web application"""
+    """Test case untuk aplikasi Flask"""
     
     def setUp(self):
-        """Setup test environment"""
+        """Setup environment untuk testing"""
         self.app = app.test_client()
         self.app.testing = True
     
     def test_homepage(self):
-        """Test homepage loading"""
+        """Test apakah homepage bisa diakses"""
         response = self.app.get('/')
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'Konversi Temperatur', response.data)
         self.assertIn(b'Masukkan Temperatur', response.data)
     
     def test_convert_api_success(self):
-        """Test successful conversion via API"""
+        """Test konversi yang berhasil via API"""
         data = {
             'temperature': '25',
             'conversion_type': 'Celcius ke Fahrenheit'
@@ -48,7 +48,7 @@ class TestTemperatureWebApp(unittest.TestCase):
         self.assertEqual(json_data['formatted_result'], '25.0°C = 77.00°F')
     
     def test_convert_api_invalid_input(self):
-        """Test API with invalid input"""
+        """Test API dengan input yang tidak valid"""
         data = {
             'temperature': 'invalid',
             'conversion_type': 'Celcius ke Fahrenheit'
@@ -64,7 +64,7 @@ class TestTemperatureWebApp(unittest.TestCase):
         self.assertIn('error', json_data)
     
     def test_convert_api_empty_input(self):
-        """Test API with empty input"""
+        """Test API dengan input kosong"""
         data = {
             'temperature': '',
             'conversion_type': 'Celcius ke Fahrenheit'
@@ -80,7 +80,7 @@ class TestTemperatureWebApp(unittest.TestCase):
         self.assertEqual(json_data['error'], 'Masukkan nilai temperatur')
     
     def test_convert_api_invalid_conversion_type(self):
-        """Test API with invalid conversion type"""
+        """Test API dengan tipe konversi yang tidak valid"""
         data = {
             'temperature': '25',
             'conversion_type': 'Invalid Conversion'
@@ -96,7 +96,7 @@ class TestTemperatureWebApp(unittest.TestCase):
         self.assertIn('not supported', json_data['error'])
     
     def test_conversions_api(self):
-        """Test conversions options API"""
+        """Test API untuk mendapatkan opsi konversi"""
         response = self.app.get('/api/conversions')
         self.assertEqual(response.status_code, 200)
         
@@ -106,7 +106,7 @@ class TestTemperatureWebApp(unittest.TestCase):
         self.assertIn('Fahrenheit ke Celcius', json_data)
     
     def test_health_check(self):
-        """Test health check endpoint"""
+        """Test endpoint health check"""
         response = self.app.get('/health')
         self.assertEqual(response.status_code, 200)
         
@@ -115,12 +115,12 @@ class TestTemperatureWebApp(unittest.TestCase):
         self.assertEqual(json_data['service'], 'Temperature Converter API')
     
     def test_404_error(self):
-        """Test 404 error handling"""
+        """Test handling error 404"""
         response = self.app.get('/nonexistent-page')
         self.assertEqual(response.status_code, 404)
     
     def test_json_404_error(self):
-        """Test 404 error for API requests"""
+        """Test error 404 untuk request API"""
         response = self.app.get('/api/nonexistent',
                                headers={'Content-Type': 'application/json'})
         self.assertEqual(response.status_code, 404)
@@ -129,10 +129,10 @@ class TestTemperatureWebApp(unittest.TestCase):
         self.assertEqual(json_data['error'], 'Endpoint not found')
 
 class TestTemperatureLogicReuse(unittest.TestCase):
-    """Test reused logic dari desktop version"""
+    """Test logic konversi temperatur"""
     
     def test_temperature_converter_methods(self):
-        """Test semua method konversi"""
+        """Test semua fungsi konversi temperatur"""
         # Test Celsius conversions
         self.assertAlmostEqual(TemperatureConverter.celsius_to_fahrenheit(0), 32.0)
         self.assertAlmostEqual(TemperatureConverter.celsius_to_fahrenheit(100), 212.0)
@@ -146,14 +146,14 @@ class TestTemperatureLogicReuse(unittest.TestCase):
         self.assertAlmostEqual(TemperatureConverter.reamur_to_celsius(80), 100.0)
     
     def test_input_validator(self):
-        """Test input validation"""
-        # Valid inputs
+        """Test validasi input"""
+        # Input yang valid
         valid, value, msg = InputValidator.validate_temperature_input("25")
         self.assertTrue(valid)
         self.assertEqual(value, 25.0)
         self.assertEqual(msg, "")
         
-        # Invalid inputs
+        # Input yang tidak valid
         valid, value, msg = InputValidator.validate_temperature_input("")
         self.assertFalse(valid)
         self.assertEqual(msg, "Masukkan nilai temperatur")
@@ -163,7 +163,7 @@ class TestTemperatureLogicReuse(unittest.TestCase):
         self.assertEqual(msg, "Masukkan angka yang valid")
     
     def test_conversion_integration(self):
-        """Test full conversion process"""
+        """Test proses konversi secara keseluruhan"""
         result, formatted = TemperatureConverter.convert(0, "Celcius ke Fahrenheit")
         self.assertEqual(result, 32.0)
         self.assertEqual(formatted, "0°C = 32.00°F")
@@ -173,15 +173,15 @@ class TestTemperatureLogicReuse(unittest.TestCase):
         self.assertEqual(formatted, "100°C = 373.15 K")
 
 class TestAPIValidation(unittest.TestCase):
-    """Test API validation dan edge cases"""
+    """Test validasi API dan kasus-kasus khusus"""
     
     def setUp(self):
         self.app = app.test_client()
         self.app.testing = True
     
     def test_extreme_temperatures(self):
-        """Test dengan temperatur ekstrem"""
-        # Absolute zero
+        """Test dengan temperatur yang ekstrem"""
+        # Test absolute zero
         data = {
             'temperature': '-273.15',
             'conversion_type': 'Celcius ke Kelvin'
@@ -195,7 +195,7 @@ class TestAPIValidation(unittest.TestCase):
         self.assertAlmostEqual(json_data['result'], 0.0)
     
     def test_large_numbers(self):
-        """Test dengan angka besar"""
+        """Test dengan angka yang sangat besar"""
         data = {
             'temperature': '1000000',
             'conversion_type': 'Celcius ke Fahrenheit'
@@ -209,7 +209,7 @@ class TestAPIValidation(unittest.TestCase):
         self.assertIsInstance(json_data['result'], (int, float))
     
     def test_decimal_precision(self):
-        """Test precision dengan decimal"""
+        """Test presisi dengan angka desimal"""
         data = {
             'temperature': '25.6789',
             'conversion_type': 'Celcius ke Fahrenheit'
@@ -220,10 +220,10 @@ class TestAPIValidation(unittest.TestCase):
         
         json_data = json.loads(response.data)
         self.assertTrue(json_data['success'])
-        # Check that result maintains precision
+        # Cek apakah hasil tetap presisi
         expected = 25.6789 * 9/5 + 32
         self.assertAlmostEqual(json_data['result'], expected, places=4)
 
 if __name__ == '__main__':
-    # Run tests with verbose output
+    # Jalankan test dengan output yang detail
     unittest.main(verbosity=2)

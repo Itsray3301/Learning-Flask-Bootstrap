@@ -1,10 +1,10 @@
 /* 
-Temperature Converter Web App - Custom Styles
-Author: itsray3301
-Description: Additional custom styles for enhanced UI/UX
+Custom CSS untuk Temperature Converter
+File ini berisi styling tambahan untuk mempercantik tampilan
+Melengkapi Bootstrap dengan animasi dan efek khusus
 */
 
-/* Additional animations */
+/* Animasi tambahan untuk transisi yang smooth */
 @keyframes slideInUp {
     from {
         opacity: 0;
@@ -37,7 +37,7 @@ Description: Additional custom styles for enhanced UI/UX
     }
 }
 
-/* Enhanced form styles */
+/* Style tambahan untuk form input */
 .form-control:valid {
     border-color: #28a745;
 }
@@ -46,7 +46,7 @@ Description: Additional custom styles for enhanced UI/UX
     border-color: #dc3545;
 }
 
-/* Custom scrollbar for webkit browsers */
+/* Custom scrollbar untuk browser webkit (Chrome, Safari) */
 ::-webkit-scrollbar {
     width: 8px;
 }
@@ -65,7 +65,7 @@ Description: Additional custom styles for enhanced UI/UX
     background: var(--primary-hover);
 }
 
-/* Improved mobile responsiveness */
+/* Responsive design untuk mobile */
 @media (max-width: 480px) {
     .converter-card {
         padding: 25px 15px;
@@ -81,7 +81,7 @@ Description: Additional custom styles for enhanced UI/UX
     }
 }
 
-/* Dark mode styles (for future enhancement) */
+/* Style untuk dark mode (fitur masa depan) */
 @media (prefers-color-scheme: dark) {
     .converter-card {
         background: rgba(33, 37, 41, 0.95);
@@ -107,7 +107,7 @@ Description: Additional custom styles for enhanced UI/UX
     }
 }
 
-/* Print styles */
+/* Style khusus untuk print */
 @media print {
     body {
         background: white !important;
@@ -123,7 +123,7 @@ Description: Additional custom styles for enhanced UI/UX
     }
 }
 
-/* High contrast mode */
+/* Style untuk mode kontras tinggi (aksesibilitas) */
 @media (prefers-contrast: high) {
     .converter-card {
         border: 3px solid #000;
